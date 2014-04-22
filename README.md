@@ -1,24 +1,28 @@
-# Tmbundle::Manager
+# TM Bundles/Package manager
 
-TODO: Write a gem description
+
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Install with RubyGems in your Terminal:
 
-    gem 'tmbundle-manager'
+    gem install tmbundle-manager
 
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install tmbundle-manager
 
 ## Usage
 
-TODO: Write usage instructions here
+Use the `tmb` executable:
+
+```shell
+$ tmb help
+
+Commands:
+  tmb edit PARTIAL_NAME  # Edit an installed bundle (name will be matched against PARTIAL_NAME)
+  tmb help [COMMAND]     # Describe available commands or one specific command
+  tmb update             # Update installed bundles
+
+```
+
 
 ## Contributing
 
