@@ -25,7 +25,50 @@ class TMBundle < Thor
     mate bundle.path
   end
 
+  desc 'update', 'Update installed bundles'
+  def update
+    require 'thread'
+    signals = Queue.new
+    trap('INT') { signals << :int }
+
+    updated = []
+    skipped = []
+    errored = []
+
+    installed_bundles[0..4].each do |bundle|
+      within bundle do
+        if not(File.exist?('./.git'))
+          puts "------> Skipping #{bundle.name} (not a Git repo, delta bundle?)"
+          skipped << bundle
+          next
+        end
+
+        puts "------> Updating #{bundle.name}..."
+        system *%w[git pull --ff-only]
+        success = $? == 0
+        updated << bundle if success
+        errored << bundle unless success
+        puts
+        (puts 'Exiting…'; exit) if signals.pop == :int until signals.empty?
+      end
+    end
+
+    puts
+    puts
+    puts '------> Summary'
+    puts
+    puts "Skipped (#{skipped.size})\n- #{skipped.map(&:name).join("\n- ")}\n\n" if skipped.any?
+    puts "Updated (#{updated.size})\n- #{updated.map(&:name).join("\n- ")}\n\n" if updated.any?
+    puts "Errored (#{errored.size})\n- #{errored.map(&:name).join("\n- ")}\n\n" if errored.any?
+  end
+
   private
+
+  def within bundle
+    Dir.chdir bundle.path do
+      yield
+    end
+  end
 
   def installed_bundles
     @installed_bundles ||= begin
