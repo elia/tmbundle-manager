@@ -79,7 +79,7 @@ class TMBundle < Thor
 
   class Bundle < Struct.new(:path)
     def name
-      @name ||= File.basename(path)
+      @name ||= File.basename(path, '.tmbundle')
     end
   end
 
