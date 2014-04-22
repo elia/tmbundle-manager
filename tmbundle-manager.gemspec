@@ -6,10 +6,10 @@ require 'tmbundle/manager/version'
 Gem::Specification.new do |spec|
   spec.name          = 'tmbundle-manager'
   spec.version       = Tmbundle::Manager::VERSION
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
   spec.authors       = ['Elia Schito']
   spec.email         = ['elia@schito.me']
+  spec.summary       = %q{TextMate 2 Bundle/Package Manager}
+  # spec.description   = %q{TODO: Write a longer description. Optional.}
   spec.homepage      = ''
   spec.license       = 'MIT'
 
