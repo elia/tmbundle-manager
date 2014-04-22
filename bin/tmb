@@ -1,9 +1,10 @@
 #!/usr/bin/env ruby
 
 require 'pathname'
+require 'thor'
 
 class TMBundle < Thor
-  desc 'edit a bundle'
+  desc 'edit PARTIAL_NAME', 'Edit an installed bundle (name will be matched against PARTIAL_NAME)'
   def edit partial_name
     matches = installed_bundles.select do |bundle|
       bundle.name =~ /^#{partial_name}/i
@@ -11,7 +12,7 @@ class TMBundle < Thor
 
     if matches.size > 1
       puts "please be more specific:"
-      matches.each_with_index {|m,i| puts " #{i+1}) #{m}"}
+      matches.each_with_index {|m,i| puts " #{i+1}) #{m.name}"}
       return false
     end
 
@@ -20,7 +21,8 @@ class TMBundle < Thor
       return false
     end
 
-    mate matches.first.path
+    bundle = matches.first
+    mate bundle.path
   end
 
   private
@@ -39,16 +41,8 @@ class TMBundle < Thor
   end
 
   def mate *args
-    command = ['mate']
-
-    if args.first
-      filename, line = args.first.split(':')
-
-      command << filename
-      command += ['-l', line] if line
-    end
-    command << '.' if command.size == 1
-    exec *command
+    exec 'mate', *args
   end
 end
 
+TMBundle.start
