@@ -6,7 +6,7 @@
 
 Install with RubyGems in your Terminal:
 
-    gem install tmbundle-manager
+    gem install tmbundle-manager --pre
 
 
 ## Usage
