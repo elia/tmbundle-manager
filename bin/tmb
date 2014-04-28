@@ -62,6 +62,14 @@ class TMBundle < Thor
     puts "Errored (#{errored.size})\n- #{errored.map(&:name).join("\n- ")}\n\n" if errored.any?
   end
 
+  desc 'install', 'Install a bundle from GitHub'
+  def install name
+    full_name = name.gsub(/(\.tmbundle)$/i, '')+'.tmbundle'
+    git_url = "https://github.com/#{full_name}.git"
+    install_path = bundles_dir.join(full_name).to_s
+    system *(%w[git clone] + [git_url, install_path])
+  end
+
   private
 
   def within bundle
@@ -71,10 +79,11 @@ class TMBundle < Thor
   end
 
   def installed_bundles
-    @installed_bundles ||= begin
-      bundles_dir = Pathname('~/Library/Application Support/Avian/Bundles').expand_path
-      Dir[bundles_dir.join('*').to_s].map {|path| Bundle.new(path)}
-    end
+    @installed_bundles ||= Dir[bundles_dir.join('*').to_s].map {|path| Bundle.new(path)}
+  end
+
+  def bundles_dir
+    @bundles_dir ||= Pathname('~/Library/Application Support/Avian/Bundles').expand_path
   end
 
   class Bundle < Struct.new(:path)
