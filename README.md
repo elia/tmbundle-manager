@@ -1,5 +1,10 @@
 # TM Bundles/Package manager
 
+Install bundle from github easily:
+
+```shell
+tmb install elia/avian-missing
+```
 
 
 ## Installation
@@ -17,16 +22,17 @@ Use the `tmb` executable:
 $ tmb help
 
 Commands:
-  tmb edit PARTIAL_NAME  # Edit an installed bundle (name will be matched against PARTIAL_NAME)
-  tmb help [COMMAND]     # Describe available commands or one specific command
-  tmb update             # Update installed bundles
+  tmb edit PARTIAL_NAME    # Edit an installed bundle (name will be matched against PARTIAL_NAME)
+  tmb help [COMMAND]       # Describe available commands or one specific command
+  tmb install USER/BUNDLE  # Install a bundle from GitHub (e.g. tmb install elia/bundler)
+  tmb update               # Update installed bundles
 
 ```
 
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/tmbundle-manager/fork )
+1. Fork it ( https://github.com/elia/tmbundle-manager/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
