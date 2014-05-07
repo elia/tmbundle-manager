@@ -60,7 +60,7 @@ class TMBundle < Thor
     puts "Errored (#{errored.size})\n- #{errored.map(&:name).join("\n- ")}\n\n" if errored.any?
   end
 
-  desc 'install', 'Install a bundle from GitHub'
+  desc 'install USER/BUNDLE', 'Install a bundle from GitHub (e.g. tmb install elia/bundler)'
   def install name
     name = BundleName.new(name)
     install_path = bundles_dir.join(name.install_name).to_s
