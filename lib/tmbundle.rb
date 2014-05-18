@@ -42,7 +42,7 @@ class TMBundle < Thor
         end
 
         puts "------> Updating #{bundle.name}..."
-        system *%w[git pull --ff-only]
+        system(*%w[git pull --ff-only])
         success = $? == 0
         updated << bundle if success
         errored << bundle unless success
@@ -67,26 +67,19 @@ class TMBundle < Thor
     system('git', 'clone', name.git_url, install_path)
   end
 
-  class BundleName
-    def initialize(name)
-      @name = name
-    end
+  # desc 'status [BUNDLE]', 'Check the status of your local copy of the bundle'
+  # def status name = nil
+  #
+  # end
 
-    attr_reader :name
-    private :name
-
-    def install_name
-      File.basename(name.gsub(/([\.\-_]tmbundle)?$/i, '.tmbundle'))
-    end
-
-    def repo_name
-      name+'.tmbundle' unless name =~ /([\.\-_]tmbundle)$/i
-    end
-
-    def git_url
-      "https://github.com/#{repo_name}.git"
+  desc 'list', 'lists all installed bundles'
+  def list
+    bundles_list.all.each do |bundle|
+      puts "- #{bundle.name.ljust(30)} (#{bundle.path})"
     end
   end
+
+
 
   private
 
@@ -97,11 +90,23 @@ class TMBundle < Thor
   end
 
   def installed_bundles
-    @installed_bundles ||= Dir[bundles_dir.join('*').to_s].map {|path| Bundle.new(path)}
+    bundles_list.all
+  end
+
+  def bundles_list
+    @bundles_list ||= BundlesList.new(bundles_dir)
   end
 
   def bundles_dir
     @bundles_dir ||= Pathname('~/Library/Application Support/Avian/Bundles').expand_path
+  end
+
+  class BundlesList < Struct.new(:dir)
+    def all
+      @all ||= Dir[dir.join('*/.git').to_s].map do |path|
+        Bundle.new(Pathname(path).join('..').to_s)
+      end
+    end
   end
 
   class Bundle < Struct.new(:path)
