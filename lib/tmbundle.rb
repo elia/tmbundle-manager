@@ -67,10 +67,17 @@ class TMBundle < Thor
     system('git', 'clone', name.git_url, install_path)
   end
 
-  # desc 'status [BUNDLE]', 'Check the status of your local copy of the bundle'
-  # def status name = nil
-  #
-  # end
+  desc 'status [BUNDLE]', 'Check the status of your local copy of the bundle'
+  def status name = nil
+    bundles_list.all.each do |bundle|
+      within bundle do
+        puts "== #{bundle.name}"
+        system('git', 'fetch')
+        system('git', 'status', '--porcelain')
+        puts
+      end
+    end
+  end
 
   desc 'list', 'lists all installed bundles'
   def list
