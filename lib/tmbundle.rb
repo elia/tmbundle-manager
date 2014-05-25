@@ -69,12 +69,38 @@ class TMBundle < Thor
 
   desc 'status [BUNDLE]', 'Check the status of your local copy of the bundle'
   def status name = nil
+    justification = 30
     bundles_list.all.each do |bundle|
       within bundle do
-        puts "== #{bundle.name}"
-        system('git', 'fetch')
-        system('git', 'status', '--porcelain')
+        print "- #{bundle.name}...".ljust(justification)
+        # puts "-> fetching updates from remote..."
+        `git fetch -aq 2> /dev/null`
+        fetch_successful = $?.success?
+        # puts "-> checking status..."
+        branch_info, *changes = `git status -zb`.split("\0")
+        branch, remote, branch_status,  = branch_info.scan(/^## (\S+)\.\.\.(\S+)(?: \[(.+)\])?/).flatten
+        cd_hint = false
+
+        if changes.any?
+          cd_hint = true
+          print "✘ #{changes.size} unchanged/new file#{:s if changes.size != 0}.".ljust(justification)
+        else
+          case branch_status.to_s
+          when /^ahead (\d+)/
+            ahead_commits = $1
+            cd_hint = true
+            print "✘ #{ahead_commits} commits ahead of #{remote}. ".ljust(justification+20)
+          when /^behind (\d+)/
+            behind_commits = $1
+            cd_hint = true
+            print "❍ behind remote (#{remote}) by #{behind_commits}. ".ljust(justification+20)
+          else
+            print "✔︎ up-to-date"
+          end
+        end
+        print "$ tmb cd #{bundle.name} # to enter the bundle directory" if cd_hint
         puts
+        puts "#{' '*justification}✘✘✘ Something went wrong while fetching from remote #{remote}" unless fetch_successful
       end
     end
   end
