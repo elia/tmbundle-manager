@@ -69,7 +69,7 @@ class TMBundle < Thor
 
   desc 'status [BUNDLE]', 'Check the status of your local copy of the bundle'
   def status name = nil
-    justification = 30
+    justification = 50
     bundles_list.all.each do |bundle|
       within bundle do
         print "- #{bundle.name}...".ljust(justification)
@@ -83,22 +83,22 @@ class TMBundle < Thor
 
         if changes.any?
           cd_hint = true
-          print "✘ #{changes.size} unchanged/new file#{:s if changes.size != 0}.".ljust(justification)
+          print "✘ #{changes.size} changed/new file#{:s if changes.size != 0}.".ljust(justification)
         else
           case branch_status.to_s
           when /^ahead (\d+)/
             ahead_commits = $1
             cd_hint = true
-            print "✘ #{ahead_commits} commits ahead of #{remote}. ".ljust(justification+20)
+            print "✘ #{ahead_commits} commits ahead of #{remote}. ".ljust(justification)
           when /^behind (\d+)/
             behind_commits = $1
             cd_hint = true
-            print "❍ behind remote (#{remote}) by #{behind_commits}. ".ljust(justification+20)
+            print "❍ behind remote (#{remote}) by #{behind_commits}. ".ljust(justification)
           else
             print "✔︎ up-to-date"
           end
         end
-        print "$ tmb cd #{bundle.name} # to enter the bundle directory" if cd_hint
+        print "$ cd \"#{bundle.path}\" # to enter the bundle directory" if cd_hint
         puts
         puts "#{' '*justification}✘✘✘ Something went wrong while fetching from remote #{remote}" unless fetch_successful
       end
