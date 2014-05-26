@@ -4,23 +4,10 @@ require 'thor'
 class TMBundle < Thor
   desc 'edit PARTIAL_NAME', 'Edit an installed bundle (name will be matched against PARTIAL_NAME)'
   def edit partial_name
-    matches = installed_bundles.select do |bundle|
-      bundle.name =~ /^#{partial_name}/i
-    end
-
-    if matches.size > 1
-      puts "please be more specific:"
-      matches.each_with_index {|m,i| puts " #{i+1}) #{m.name}"}
-      return false
-    end
-
-    if matches.empty?
-      puts "nothing found"
-      return false
-    end
-
-    bundle = matches.first
+    bundle find_bundle(partial_name)
     mate bundle.path
+  rescue NotFound
+    return false
   end
 
   desc 'update', 'Update installed bundles'
@@ -115,6 +102,28 @@ class TMBundle < Thor
 
 
   private
+
+  def find_bundle(partial_name)
+    matches = installed_bundles.select do |bundle|
+      bundle.name =~ /^#{partial_name}/i
+    end
+
+    if matches.size > 1
+      puts "please be more specific:"
+      matches.each_with_index {|m,i| puts " #{i+1}) #{m.name}"}
+      raise NotFound
+    end
+
+    if matches.empty?
+      puts "nothing found"
+      raise NotFound
+    end
+
+    matches.first
+  end
+
+  class NotFound < StandardError
+  end
 
   def within bundle
     Dir.chdir bundle.path do
