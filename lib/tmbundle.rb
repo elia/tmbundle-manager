@@ -54,6 +54,13 @@ class TMBundle < Thor
     system('git', 'clone', name.git_url, install_path)
   end
 
+  desc 'path NAME', 'print path to bundle dir'
+  def path name
+    puts find_bundle(name).path
+  rescue NotFound
+    return false
+  end
+
   desc 'status [BUNDLE]', 'Check the status of your local copy of the bundle'
   def status name = nil
     justification = 50
