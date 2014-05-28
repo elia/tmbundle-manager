@@ -4,7 +4,7 @@ require 'thor'
 class TMBundle < Thor
   desc 'edit PARTIAL_NAME', 'Edit an installed bundle (name will be matched against PARTIAL_NAME)'
   def edit partial_name
-    bundle find_bundle(partial_name)
+    bundle = find_bundle(partial_name)
     mate bundle.path
   rescue NotFound
     return false
