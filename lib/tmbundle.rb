@@ -49,6 +49,7 @@ class TMBundle < Thor
 
   desc 'install USER/BUNDLE', 'Install a bundle from GitHub (e.g. tmb install elia/bundler)'
   def install name
+    require 'tmbundle/bundle_name'
     name = BundleName.new(name)
     install_path = bundles_dir.join(name.install_name).to_s
     system('git', 'clone', name.git_url, install_path)
