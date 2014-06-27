@@ -11,8 +11,11 @@ class TMBundle < Thor
     return false
   end
 
-  desc 'update', 'Update installed bundles'
-  def update
+  desc 'update [PARTIAL_NAME]', 'Update installed bundles'
+  def update(partial_name = nil)
+    bundle = find_bundle(partial_name) if partial_name
+    bundles_to_update = bundle ? [bundle] : installed_bundles
+
     require 'thread'
     signals = Queue.new
     trap('INT') { signals << :int }
@@ -21,7 +24,7 @@ class TMBundle < Thor
     skipped = []
     errored = []
 
-    installed_bundles[0..4].each do |bundle|
+    bundles_to_update.each do |bundle|
       within bundle do
         if not(File.exist?('./.git'))
           puts "------> Skipping #{bundle.name} (not a Git repo, delta bundle?)"
