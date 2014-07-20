@@ -123,7 +123,8 @@ class TMBundle < Thor
     if matches.size > 1
       puts "please be more specific:"
       matches.each_with_index {|m,i| puts " #{i+1}) #{m.name}"}
-      raise NotFound
+      print 'Type the number> '
+      return(matches[$stdin.gets.to_i-1] || raise(NotFound))
     end
 
     if matches.empty?
