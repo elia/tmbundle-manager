@@ -111,6 +111,14 @@ class TMBundle < Thor
     end
   end
 
+  desc 'cd PARTIAL_NAME', 'open a terminal in the bundle dir'
+  def cd(partial_name)
+    bundle = find_bundle(partial_name)
+    within bundle do
+      system 'open', bundle.path, '-a', 'Terminal.app'
+    end
+  end
+
 
 
   private
