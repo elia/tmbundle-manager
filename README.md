@@ -11,7 +11,7 @@ tmb install elia/avian-missing
 
 Install with RubyGems in your Terminal:
 
-    gem install tmbundle-manager --pre
+    gem install tmbundle-manager
 
 
 ## Usage
@@ -20,12 +20,15 @@ Use the `tmb` executable:
 
 ```shell
 $ tmb help
-
 Commands:
-  tmb edit PARTIAL_NAME    # Edit an installed bundle (name will be matched against PARTIAL_NAME)
-  tmb help [COMMAND]       # Describe available commands or one specific command
-  tmb install USER/BUNDLE  # Install a bundle from GitHub (e.g. tmb install elia/bundler)
-  tmb update               # Update installed bundles
+  tmb cd PARTIAL_NAME        # open a terminal in the bundle dir
+  tmb edit PARTIAL_NAME      # Edit an installed bundle (name will be matched against PARTIAL_NAME)
+  tmb help [COMMAND]         # Describe available commands or one specific command
+  tmb install USER/BUNDLE    # Install a bundle from GitHub (e.g. tmb install elia/bundler)
+  tmb list                   # lists all installed bundles
+  tmb path NAME              # print path to bundle dir
+  tmb status [BUNDLE]        # Check the status of your local copy of the bundle
+  tmb update [PARTIAL_NAME]  # Update installed bundles
 
 ```
 
