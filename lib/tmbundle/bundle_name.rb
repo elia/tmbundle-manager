@@ -9,7 +9,7 @@ class TMBundle::BundleName
   private :name
 
   def install_name
-    File.basename(name =~ REGEX ? name.gsub(REGEX, '.tmbundle') : name)
+    File.basename(name =~ REGEX ? name.gsub(REGEX, '.tmbundle') : name+'.tmbundle')
   end
 
   def repo_name
