@@ -20,6 +20,10 @@ class TMBundle::BundleName
     "https://github.com/#{repo_name}.git"
   end
 
+  def alt_git_url
+    git_url.gsub('.tmbundle', '-tmbundle')
+  end
+  
   def inspect
     "#<TMBundle::BundleName @name=#@name repo_name:#{repo_name} git_url:#{git_url} install_name:#{install_name}>"
   end

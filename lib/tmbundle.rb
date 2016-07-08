@@ -56,7 +56,11 @@ class TMBundle < Thor
     require 'tmbundle/bundle_name'
     name = BundleName.new(name)
     install_path = bundles_dir.join(name.install_name).to_s
-    system('git', 'clone', name.git_url, install_path)
+    success = system('git', 'clone', name.git_url, install_path)
+    if not success
+      puts "attempting clone of #{name.alt_git_url}"
+      success = system('git', 'clone', name.alt_git_url, install_path)
+    end
   end
 
   desc 'path NAME', 'print path to bundle dir'
