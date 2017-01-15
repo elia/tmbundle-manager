@@ -165,7 +165,7 @@ class TMBundle < Thor
   end
 
   def bundles_dir
-    @bundles_dir ||= Pathname('~/Library/Application Support/Avian/Bundles').expand_path
+    @bundles_dir ||= Pathname('~/Library/Application Support/TextMate/Bundles').expand_path
   end
 
   class BundlesList < Struct.new(:dir)
