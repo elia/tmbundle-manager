@@ -119,7 +119,8 @@ class TMBundle < Thor
   def cd(partial_name)
     bundle = find_bundle(partial_name)
     within bundle do
-      system 'open', bundle.path, '-a', 'Terminal.app'
+      term_program = ENV['TERM_PROGRAM'] || 'Terminal.app'
+      system 'open', bundle.path, '-a', term_program
     end
   end
 
